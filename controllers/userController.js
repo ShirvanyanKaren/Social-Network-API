@@ -37,7 +37,7 @@ async createUser(req, res) {
 
 async updateUser(req, res) {
     try {
-        const updateUser = await User.findByIdAndUpdate(
+        const updateUser = await User.findOneAndUpdate$(
             { _id: req.params.id },
             { $set: req.body },
             { runValidators: true, new: true }
@@ -71,7 +71,7 @@ async deleteUser(req, res) {
 async addUserFriend(req, res) {
     try {
         const addFriend = await User.findOneAndUpdate(
-            { _id: req.params.id },
+            { _id: req.params.userId },
             { $addToSet: { friends: req.params.friendId }},
             { runValidators: true, new: true }
             );
@@ -89,8 +89,8 @@ async addUserFriend(req, res) {
 
 async deleteUserFriend(req, res) {
     try {
-        const deleteFriend = await User.findOneAndRemove(
-            { _id: req.params.id },
+        const deleteFriend = await User.findOneAndUpdate(
+            { _id: req.params.userId },
             { $pull: {friends: req.params.friendId }},
             { runValidators: true, new: true }
         )
