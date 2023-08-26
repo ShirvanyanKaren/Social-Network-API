@@ -1,5 +1,5 @@
-const { ObjectId } = require('mongoose').Types;
-const { Thought, model, User } = require('../models');
+// const { ObjectId } = require('mongoose').Types;
+const { Thought, User } = require('../models');
 
 module.exports = {
 async getUsers(req, res) {

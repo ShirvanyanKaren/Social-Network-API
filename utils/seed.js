@@ -24,7 +24,7 @@ async function seedDatabase() {
 
     // Create friend relationships
     for (const user of users) {
-      const numFriends = faker.random.number({ min: 1, max: 5 });
+      const numFriends = faker.datatype.number({ min: 1, max: 5 });
       const friends = [];
       while (friends.length < numFriends) {
         const randomUser = users[Math.floor(Math.random() * users.length)];
