@@ -2,6 +2,7 @@ const { Schema, model, Types } = require('mongoose');
 const  dayjs = require('dayjs');
 // const userSchema = require('./User');
 
+// create reaction schema with ObjectId to be assigned to thoughSchema
 const reactionSchema = new Schema(
     {
         reactionId: {
@@ -51,6 +52,7 @@ const thoughtSchema = new Schema(
         type: String,
         required: true,
     },
+    // include reactionschema as an array part of the thoughtschema
     reactions: [reactionSchema],
 
 },
@@ -59,9 +61,11 @@ const thoughtSchema = new Schema(
         getters: true,
         virtuals: true,
     },
+    id: false,
 }
 );
 
+// create virtual for thoughtschema to include the reactions length per thought
 thoughtSchema.virtual('reactionCount').get(function() {
     return this.reactions.length;
 });

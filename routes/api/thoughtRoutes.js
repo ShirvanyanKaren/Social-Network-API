@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+//gather all functions for thoughts
 const {
     getThoughts,
     getSingleThought,
@@ -10,6 +11,8 @@ const {
     deleteReaction
 } = require('../../controllers/thoughtController')
 
+
+//assign these functions RESTful routes
 router.route('/').get(getThoughts).post(createThought)
 
 router.route('/:thoughtId').get(getSingleThought).delete(deleteThought).put(updateThought);

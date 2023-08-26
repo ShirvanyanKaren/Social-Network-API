@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+//gather all functions for users
 const {
     getUsers,
     getSingleUser,
@@ -10,6 +11,7 @@ const {
     deleteUserFriend
 } = require('../../controllers/userController')
 
+//assign them RESTful routes
 router.route('/').get(getUsers).post(createUser)
 
 router.route('/:userId').get(getSingleUser).delete(deleteUser).put(updateUser);

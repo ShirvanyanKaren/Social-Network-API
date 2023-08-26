@@ -1,6 +1,7 @@
 // const { ObjectId } = require('mongoose').Types;
 const { Thought, User } = require('../models');
 
+// export all controllers to be utilized in routes
 module.exports = {
 async getUsers(req, res) {
     try {
@@ -14,7 +15,7 @@ async getUsers(req, res) {
 async getSingleUser(req, res) {
     try {
         const user = await User.findOne({ _id: req.params.userId })
-        // .populate('thoughts')
+        .populate('thoughts')
         .populate('friends')
         .select('-__v');
         if(!user){
@@ -55,16 +56,17 @@ async updateUser(req, res) {
 async deleteUser(req, res) {
     try {
         const deleteUser = await User.findOneAndDelete({ _id: req.params.userId });
-        if(!updateUser){
+        if(!deleteUser){
             res.status(404).json({ message: 'No user with that id! '});
         }
-         const deleteUserThoughts = await Thought.deleteMany({ $in: deleteUser.username });
+         const deleteUserThoughts = await Thought.deleteMany({ _id: {$in: deleteUser.thoughts} });
 
-        await User.deleteMany({ $in: deleteUser.username });
+        // await User.deleteMany({ $in: deleteUser.username });
         
-        res.status(200).json({ message: 'User(s) deleted!', deleteUser, deleteUserThoughts });
+        res.status(200).json({ message: 'User(s) and thoughts deleted!', deleteUser, deleteUserThoughts });
 
     } catch (err) {
+        console.log(err);
         res.status(500).json(err);
     }
 },

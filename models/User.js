@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
-const thoughtSchema = require('./Thought');
-const  dayjs = require('dayjs');
 
+
+// create user schema with specified values
 const userSchema = new Schema(
 {
    username: {
@@ -14,6 +14,7 @@ const userSchema = new Schema(
     type: String,
     required: [true, 'Email address is a required field'],
     unique: true,
+    //include validation using email regex
     validate: {
         validator: function (v) {
             return /^([a-zA-Z0-9_\.-]+)@([a-zA-Z\d\.-]+)\.([a-zA-Z\.]{2,6})$/
@@ -43,6 +44,7 @@ const userSchema = new Schema(
     id: false,
 }
 );
+//create virtual to calculate amount of friends per user
 userSchema.virtual('friendsCount').get(function (){
     return this.friends.length;
 })

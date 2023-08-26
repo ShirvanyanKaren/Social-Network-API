@@ -1,5 +1,6 @@
 const { User, Thought } = require('../models');
 
+// export all controllers to be utilized in routes
 module.exports = {
     async getThoughts(req, res) {
         try {
