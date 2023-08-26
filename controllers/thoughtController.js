@@ -12,7 +12,7 @@ module.exports = {
 
     async getSingleThought(req, res) {
         try {
-            const thought = await Thought.findOne({ _id: req.params.id })
+            const thought = await Thought.findOne({ _id: req.params.thoughtId })
             .select('-__v')
             .populate('reactions');
             if(!thought){
@@ -25,10 +25,7 @@ module.exports = {
     },
     async createThought(req, res) {
         try {
-            const createThought = await Thought.create(
-                req.body,
-                { runValidators: true, new: true }
-            )
+            const createThought = await Thought.create(req.body);
             const userThought = await User.findOneAndUpdate(
                 { _id: req.body.userId },
                 { $addToSet: { thoughts: createThought._id }},
@@ -43,29 +40,32 @@ module.exports = {
     async updateThought(req, res) {
         try {
             const updateThought = await Thought.findOneAndUpdate(
-                { _id: req.params.id },
+                { _id: req.params.thoughtId },
                 { $set: req.body },
                 { runValidators: true, new: true }
-            )
+            );
             if(!updateThought){
                 res.status(404).json({ message: 'No thought with that id! '});
             }
-            res.json(updateThought);
+            res.status(200).json({ message: "Thought updated!", updateThought });
         } catch (err) {
+            console.log(err);
             res.status(500).json(err);
         }
     },
     async deleteThought(req, res) {
         try {
-            const deleteThought = await Thought.findOneAndDelete({ _id: req.params.id });
+            const deleteThought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
             if (!deleteThought) {
                 res.status(404).json({ message: 'No thought with that id! '});
             }
-            const deleteThoughts = await Thought.deleteMany({ $in: deleteThought.thoughtId })
 
-            res.status(200).json({ message: 'Thought(s) deleted!', deleteThought, deleteThoughts });
+            // const deleteThoughts = await Thought.deleteMany( req.body );
+
+            res.status(200).json({ message: "Thought(s) deleted!", deleteThought });
 
         } catch (err) {
+            console.log(err);
             res.status(500).json(err);
         }
     },
@@ -86,7 +86,7 @@ module.exports = {
             const deleteReaction = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
                 { $pull: { reactions: 
-                    {reactionId: req.params.reactionId }
+                    { reactionId: req.params.reactionId }
                     }
                 },
                 { runValidators: true, new: true}
